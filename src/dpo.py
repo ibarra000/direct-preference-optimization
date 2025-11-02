@@ -2,15 +2,15 @@ import os
 import json
 from tqdm.auto import tqdm
 from trl import DPOConfig, DPOTrainer
-from datasets import Dataset  # <-- Import Dataset
+from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 GENERATIONS_DIR = "../generations"
 NUM_PROMPTS = 1000
-DEVICE = "cuda" # Assumes CUDA is available
+DEVICE = "cuda"
 LEARNING_RATE = 2e-5
 WANDB_NOTEBOOK_NAME = 'hw5/Direct-Preference-Optimization'
-SFT_MODEL_PATH = "./fine-tuned-gpt2-large" # Your SFT checkpoint
+SFT_MODEL_PATH = "./fine-tuned-gpt2-large"
 
 def load_preference_pairs() -> list[dict]:
     pairs = []
@@ -37,7 +37,7 @@ def main():
     betas = [0.05, 0.1, 1.0]
 
     for beta in betas:
-        print(f"\n--- 🚀 Starting DPO Training for beta={beta} ---")
+        print(f"\n--- Starting DPO Training for beta={beta} ---")
 
         model = AutoModelForCausalLM.from_pretrained(SFT_MODEL_PATH).to(DEVICE)
 
@@ -70,11 +70,10 @@ def main():
 
         print(f"Saving model to {local_save_path}...")
         trainer.save_model(local_save_path)
-        print(f"✅ Finished run for beta={beta}.")
+        print(f"Finished run for beta={beta}.")
         print("-------------------------------------------\n")
 
-    print("🎉 All DPO training runs complete.")
-    return
+    print("All DPO training runs complete.")
 
 if __name__ == "__main__":
     main()
